@@ -3,7 +3,7 @@ import { BudgetListContext } from "./BudgetListContext.js";
 
 import Button from "react-bootstrap/esm/Button.js";
 
-import BudgetCard from "./BudgetCard";
+import BudgetCard from "./BudgetCard.js";
 import BudgetForm from "./BudgetForm.js";
 import Container from "react-bootstrap/esm/Container.js";
 
