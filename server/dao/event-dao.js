@@ -2,75 +2,75 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
-const eventFolderPath = path.join(__dirname, "storage", "eventList");
+const budgetFolderPath = path.join(__dirname, "storage", "budgetList");
 
-// Method to read an event from a file
-function get(eventId) {
+// Method to read an budget from a file
+function get(budgetId) {
   try {
-    const filePath = path.join(eventFolderPath, `${eventId}.json`);
+    const filePath = path.join(budgetFolderPath, `${budgetId}.json`);
     const fileData = fs.readFileSync(filePath, "utf8");
     return JSON.parse(fileData);
   } catch (error) {
     if (error.code === "ENOENT") return null;
-    throw { code: "failedToReadEvent", message: error.message };
+    throw { code: "failedToReadBudget", message: error.message };
   }
 }
 
-// Method to write an event to a file
-function create(event) {
+// Method to write an budget to a file
+function create(budget) {
   try {
-    event.id = crypto.randomBytes(16).toString("hex");
-    const filePath = path.join(eventFolderPath, `${event.id}.json`);
-    const fileData = JSON.stringify(event);
+    budget.id = crypto.randomBytes(16).toString("hex");
+    const filePath = path.join(budgetFolderPath, `${budget.id}.json`);
+    const fileData = JSON.stringify(budget);
     fs.writeFileSync(filePath, fileData, "utf8");
-    return event;
+    return budget;
   } catch (error) {
-    throw { code: "failedToCreateEvent", message: error.message };
+    throw { code: "failedToCreateBudget", message: error.message };
   }
 }
 
-// Method to update event in a file
-function update(event) {
+// Method to update budget in a file
+function update(budget) {
   try {
-    const currentEvent = get(event.id);
-    if (!currentEvent) return null;
-    const newEvent = { ...currentEvent, ...event };
-    const filePath = path.join(eventFolderPath, `${event.id}.json`);
-    const fileData = JSON.stringify(newEvent);
+    const currentBudget = get(budget.id);
+    if (!currentBudget) return null;
+    const newBudget = { ...currentBudget, ...budget };
+    const filePath = path.join(budgetFolderPath, `${budget.id}.json`);
+    const fileData = JSON.stringify(newBudget);
     fs.writeFileSync(filePath, fileData, "utf8");
-    return newEvent;
+    return newBudget;
   } catch (error) {
-    throw { code: "failedToUpdateEvent", message: error.message };
+    throw { code: "failedToUpdateBudget", message: error.message };
   }
 }
 
-// Method to remove an event from a file
-function remove(eventId) {
+// Method to remove an budget from a file
+function remove(budgetId) {
   try {
-    const filePath = path.join(eventFolderPath, `${eventId}.json`);
+    const filePath = path.join(budgetFolderPath, `${budgetId}.json`);
     fs.unlinkSync(filePath);
     return {};
   } catch (error) {
     if (error.code === "ENOENT") return {};
-    throw { code: "failedToRemoveEvent", message: error.message };
+    throw { code: "failedToRemoveBudget", message: error.message };
   }
 }
 
-// Method to list events in a folder
+// Method to list budgets in a folder
 function list() {
   try {
-    const files = fs.readdirSync(eventFolderPath);
-    const eventList = files.map((file) => {
+    const files = fs.readdirSync(budgetFolderPath);
+    const budgetList = files.map((file) => {
       const fileData = fs.readFileSync(
-        path.join(eventFolderPath, file),
+        path.join(budgetFolderPath, file),
         "utf8"
       );
       return JSON.parse(fileData);
     });
-    eventList.sort((a, b) => new Date(a.date) - new Date(b.date));
-    return eventList;
+    budgetList.sort((a, b) => new Date(a.date) - new Date(b.date));
+    return budgetList;
   } catch (error) {
-    throw { code: "failedToListEvents", message: error.message };
+    throw { code: "failedToListBudgets", message: error.message };
   }
 }
 

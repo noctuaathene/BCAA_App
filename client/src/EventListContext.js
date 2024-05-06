@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const EventListContext = createContext();
+export const BudgetListContext = createContext();

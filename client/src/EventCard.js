@@ -1,19 +1,19 @@
 import Button from "react-bootstrap/esm/Button.js";
 import { useNavigate } from "react-router-dom";
 
-import EventDateTimeBadge from "./EventDateTimeBadge";
-import EventDetail from "./EventDetail";
+import BudgetDateTimeBadge from "./BudgetDateTimeBadge";
+import BudgetDetail from "./BudgetDetail";
 
 import Icon from "@mdi/react";
 import { mdiEyeOutline, mdiPencil, mdiTrashCanOutline } from "@mdi/js";
 
-function EventCard({ event, setShowEventForm, setShowConfirmDeleteDialog }) {
+function BudgetCard({ budget, setShowBudgetForm, setShowConfirmDeleteDialog }) {
   const navigate = useNavigate();
 
   return (
     <div className="card border-0 shadow rounded" style={componentStyle()}>
-      <EventDateTimeBadge event={event} />
-      <EventDetail event={event} />
+      <BudgetDateTimeBadge budget={budget} />
+      <BudgetDetail budget={budget} />
       <div
         style={{
           display: "grid",
@@ -23,16 +23,16 @@ function EventCard({ event, setShowEventForm, setShowConfirmDeleteDialog }) {
         }}
       >
         <Button
-          onClick={() => navigate("/eventDetail?id=" + event.id)}
+          onClick={() => navigate("/budgetDetail?id=" + budget.id)}
           size={"sm"}
         >
           <Icon path={mdiEyeOutline} size={0.7} />
         </Button>
-        <Button onClick={() => setShowEventForm(event)} size={"sm"}>
+        <Button onClick={() => setShowBudgetForm(budget)} size={"sm"}>
           <Icon path={mdiPencil} size={0.7} />
         </Button>
         <Button
-          onClick={() => setShowConfirmDeleteDialog(event)}
+          onClick={() => setShowConfirmDeleteDialog(budget)}
           size={"sm"}
           variant="danger"
         >
@@ -54,4 +54,4 @@ function componentStyle() {
   };
 }
 
-export default EventCard;
+export default BudgetCard;

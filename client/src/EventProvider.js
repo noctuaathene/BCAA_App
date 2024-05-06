@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 
-import { EventContext } from "./EventContext.js";
+import { BudgetContext } from "./BudgetContext.js";
 
-function EventProvider({ children }) {
-  const [eventLoadObject, setEventLoadObject] = useState({
+function BudgetProvider({ children }) {
+  const [budgetLoadObject, setBudgetLoadObject] = useState({
     state: "ready",
     error: null,
     data: null,
@@ -21,9 +21,9 @@ function EventProvider({ children }) {
   }, []);
 
   async function handleLoad() {
-    setEventLoadObject((current) => ({ ...current, state: "pending" }));
+    setBudgetLoadObject((current) => ({ ...current, state: "pending" }));
     const response = await fetch(
-      `http://localhost:8000/event/get?id=${new URLSearchParams(
+      `http://localhost:8000/budget/get?id=${new URLSearchParams(
         location.search
       ).get("id")}`,
       {
@@ -32,10 +32,10 @@ function EventProvider({ children }) {
     );
     const responseJson = await response.json();
     if (response.status < 400) {
-      setEventLoadObject({ state: "ready", data: responseJson });
+      setBudgetLoadObject({ state: "ready", data: responseJson });
       return responseJson;
     } else {
-      setEventLoadObject((current) => ({
+      setBudgetLoadObject((current) => ({
         state: "error",
         data: current.data,
         error: responseJson.error,
@@ -44,12 +44,12 @@ function EventProvider({ children }) {
     }
   }
   const value = {
-    event: eventLoadObject.data,
+    budget: budgetLoadObject.data,
   };
 
   return (
-    <EventContext.Provider value={value}>{children}</EventContext.Provider>
+    <BudgetContext.Provider value={value}>{children}</BudgetContext.Provider>
   );
 }
 
-export default EventProvider;
+export default BudgetProvider;

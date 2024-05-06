@@ -1,24 +1,24 @@
 import { useContext } from "react";
-import { EventContext } from "./EventContext";
+import { BudgetContext } from "./BudgetContext";
 import Button from "react-bootstrap/esm/Button.js";
 import { useNavigate } from "react-router-dom";
 
-import EventDateTimeBadge from "./EventDateTimeBadge";
-import EventDetail from "./EventDetail";
+import BudgetDateTimeBadge from "./BudgetDateTimeBadge";
+import BudgetDetail from "./BudgetDetail";
 
 import Icon from "@mdi/react";
 import { mdiEyeOutline, mdiPencil } from "@mdi/js";
 
-function EventRoute({ setShowEventForm }) {
+function BudgetRoute({ setShowBudgetForm }) {
   const navigate = useNavigate();
-  const { event } = useContext(EventContext);
+  const { budget } = useContext(BudgetContext);
 
   return (
     <div className="card border-0 shadow rounded" style={componentStyle()}>
-      {event ? (
+      {budget ? (
         <>
-          <EventDateTimeBadge event={event} />
-          <EventDetail event={event} />
+          <BudgetDateTimeBadge budget={budget} />
+          <BudgetDetail budget={budget} />
           <div
             style={{
               display: "grid",
@@ -28,12 +28,12 @@ function EventRoute({ setShowEventForm }) {
             }}
           >
             <Button
-              onClick={() => navigate("/eventDetail?id=" + event.id)}
+              onClick={() => navigate("/budgetDetail?id=" + budget.id)}
               size={"sm"}
             >
               <Icon path={mdiEyeOutline} size={0.7} />
             </Button>
-            <Button onClick={() => setShowEventForm(event)} size={"sm"}>
+            <Button onClick={() => setShowBudgetForm(budget)} size={"sm"}>
               <Icon path={mdiPencil} size={0.7} />
             </Button>
           </div>
@@ -56,4 +56,4 @@ function componentStyle() {
   };
 }
 
-export default EventRoute;
+export default BudgetRoute;

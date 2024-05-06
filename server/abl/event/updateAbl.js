@@ -3,7 +3,7 @@ const addFormats = require("ajv-formats").default;
 const ajv = new Ajv();
 addFormats(ajv);
 
-const eventDao = require("../../dao/event-dao.js");
+const budgetDao = require("../../dao/budget-dao.js");
 
 const schema = {
   type: "object",
@@ -19,10 +19,10 @@ const schema = {
 
 async function UpdateAbl(req, res) {
   try {
-    let event = req.body;
+    let budget = req.body;
 
     // validate input
-    const valid = ajv.validate(schema, event);
+    const valid = ajv.validate(schema, budget);
     if (!valid) {
       res.status(400).json({
         code: "dtoInIsNotValid",
@@ -32,16 +32,16 @@ async function UpdateAbl(req, res) {
       return;
     }
 
-    const updatedEvent = eventDao.update(event);
-    if (!updatedEvent) {
+    const updatedBudget = budgetDao.update(budget);
+    if (!updatedBudget) {
       res.status(404).json({
-        code: "eventNotFound",
-        message: `Event ${event.id} not found`,
+        code: "budgetNotFound",
+        message: `Budget ${budget.id} not found`,
       });
       return;
     }
 
-    res.json(updatedEvent);
+    res.json(updatedBudget);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

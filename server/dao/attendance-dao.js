@@ -4,11 +4,11 @@ const path = require("path");
 const attendanceFolderPath = path.join(__dirname, "storage", "attendanceList");
 
 // Method to read an attendance from a file
-function get(userId, eventId) {
+function get(userId, budgetId) {
   try {
     const attendanceList = list();
     const attendance = attendanceList.find(
-      (a) => a.userId === userId && a.eventId === eventId
+      (a) => a.userId === userId && a.budgetId === budgetId
     );
     return attendance;
   } catch (error) {
@@ -19,7 +19,7 @@ function get(userId, eventId) {
 // Method to update attendance in a file
 function update(attendance) {
   try {
-    const currentAttendance = get(attendance.userId, attendance.eventId) || {};
+    const currentAttendance = get(attendance.userId, attendance.budgetId) || {};
     if (currentAttendance.file) {
       const filePath = path.join(attendanceFolderPath, currentAttendance.file);
       fs.unlinkSync(filePath);
@@ -28,7 +28,7 @@ function update(attendance) {
 
     const filePath = path.join(
       attendanceFolderPath,
-      `${newAttendance.userId}_${newAttendance.eventId}_${newAttendance.attendance}_${newAttendance.guests}.txt`
+      `${newAttendance.userId}_${newAttendance.budgetId}_${newAttendance.attendance}_${newAttendance.guests}.txt`
     );
     fs.writeFileSync(filePath, "", "utf8");
     return newAttendance;
@@ -38,9 +38,9 @@ function update(attendance) {
 }
 
 // Method to remove an attendance from a file
-function remove(userId, eventId) {
+function remove(userId, budgetId) {
   try {
-    const attendance = get(userId, eventId);
+    const attendance = get(userId, budgetId);
     if (attendance) {
       const filePath = path.join(attendanceFolderPath, attendance.file);
       fs.unlinkSync(filePath);
@@ -62,7 +62,7 @@ function list() {
       const attendanceData = file.replace(".txt", "").split("_");
       return {
         userId: attendanceData[0],
-        eventId: attendanceData[1],
+        budgetId: attendanceData[1],
         attendance: attendanceData[2],
         guests: Number(attendanceData[3]),
         file,
@@ -74,15 +74,15 @@ function list() {
   }
 }
 
-function eventMap() {
+function budgetMap() {
   const attendanceList = list();
   const attendanceMap = {};
   attendanceList.forEach((attendance) => {
-    if (!attendanceMap[attendance.eventId])
-      attendanceMap[attendance.eventId] = {};
-    if (!attendanceMap[attendance.eventId][attendance.userId])
-      attendanceMap[attendance.eventId][attendance.userId] = {};
-    attendanceMap[attendance.eventId][attendance.userId] = {
+    if (!attendanceMap[attendance.budgetId])
+      attendanceMap[attendance.budgetId] = {};
+    if (!attendanceMap[attendance.budgetId][attendance.userId])
+      attendanceMap[attendance.budgetId][attendance.userId] = {};
+    attendanceMap[attendance.budgetId][attendance.userId] = {
       attendance: attendance.attendance,
       guests: attendance.guests,
     };
@@ -96,9 +96,9 @@ function userMap() {
   attendanceList.forEach((attendance) => {
     if (!attendanceMap[attendance.userId])
       attendanceMap[attendance.userId] = {};
-    if (!attendanceMap[attendance.userId][attendance.eventId])
-      attendanceMap[attendance.userId][attendance.eventId] = {};
-    attendanceMap[attendance.userId][attendance.eventId] = {
+    if (!attendanceMap[attendance.userId][attendance.budgetId])
+      attendanceMap[attendance.userId][attendance.budgetId] = {};
+    attendanceMap[attendance.userId][attendance.budgetId] = {
       attendance: attendance.attendance,
       guests: attendance.guests,
     };
@@ -111,6 +111,6 @@ module.exports = {
   update,
   remove,
   list,
-  eventMap,
+  budgetMap,
   userMap,
 };

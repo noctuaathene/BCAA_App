@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { EventListContext } from "./EventListContext.js";
+import { BudgetListContext } from "./BudgetListContext.js";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -9,8 +9,8 @@ import Alert from "react-bootstrap/Alert";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 
-function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, event }) {
-  const { state, handlerMap } = useContext(EventListContext);
+function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, budget }) {
+  const { state, handlerMap } = useContext(BudgetListContext);
   const [showAlert, setShowAlert] = useState(null);
   const isPending = state === "pending";
 
@@ -35,7 +35,7 @@ function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, event }) {
             <Icon path={mdiLoading} size={2} spin />
           </div>
         ) : null}
-        Opravdu chcete smazat událost {event.name}?
+        Opravdu chcete smazat událost {budget.name}?
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -51,7 +51,7 @@ function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, event }) {
           disabled={isPending}
           onClick={async (e) => {
             try {
-              await handlerMap.handleDelete({ id: event.id });
+              await handlerMap.handleDelete({ id: budget.id });
               setShowConfirmDeleteDialog(false);
             } catch (e) {
               console.error(e);

@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
 const ajv = new Ajv();
 
-const eventDao = require("../../dao/event-dao.js");
+const budgetDao = require("../../dao/budget-dao.js");
 const attendanceDao = require("../../dao/attendance-dao.js");
 
 const schema = {
@@ -29,16 +29,16 @@ async function DeleteAbl(req, res) {
       return;
     }
 
-    const attendanceMap = attendanceDao.eventMap();
+    const attendanceMap = attendanceDao.budgetMap();
     if (attendanceMap[reqParams.id]) {
       res.status(400).json({
-        code: "eventHasAttendances",
-        message: `Event ${reqParams.id} has attendances`,
+        code: "budgetHasAttendances",
+        message: `Budget ${reqParams.id} has attendances`,
       });
       return;
     }
 
-    eventDao.remove(reqParams.id);
+    budgetDao.remove(reqParams.id);
     res.json({});
   } catch (e) {
     res.status(500).json({ message: e.message });

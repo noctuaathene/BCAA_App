@@ -2,18 +2,18 @@ const Ajv = require("ajv");
 const ajv = new Ajv();
 
 const userDao = require("../../dao/user-dao.js");
-const eventDao = require("../../dao/event-dao.js");
+const budgetDao = require("../../dao/budget-dao.js");
 const attendanceDao = require("../../dao/attendance-dao.js");
 
 const schema = {
   type: "object",
   properties: {
-    eventId: { type: "string", minLength: 32, maxLength: 32 },
+    budgetId: { type: "string", minLength: 32, maxLength: 32 },
     userId: { type: "string", minLength: 32, maxLength: 32 },
     attendance: { enum: ["yes", "no", null] },
     guests: { enum: [0, 1, 2, 3, 4, 5, 6] },
   },
-  required: ["eventId", "userId"],
+  required: ["budgetId", "userId"],
   additionalProperties: false,
 };
 
@@ -42,21 +42,21 @@ async function UpdateAbl(req, res) {
       return;
     }
 
-    // check if event exists
-    const event = eventDao.get(dtoIn.eventId);
-    if (!event) {
+    // check if budget exists
+    const budget = budgetDao.get(dtoIn.budgetId);
+    if (!budget) {
       res.status(404).json({
-        code: "eventNotFound",
-        message: `Event ${dtoIn.eventId} not found`,
+        code: "budgetNotFound",
+        message: `Budget ${dtoIn.budgetId} not found`,
       });
       return;
     }
 
-    let attendance = attendanceDao.get(dtoIn.userId, dtoIn.eventId);
+    let attendance = attendanceDao.get(dtoIn.userId, dtoIn.budgetId);
     attendance = { ...(attendance || {}), ...dtoIn };
 
     if (!attendance.attendance && !attendance.guests) {
-      attendanceDao.remove(attendance.userId, attendance.eventId);
+      attendanceDao.remove(attendance.userId, attendance.budgetId);
     } else {
       attendance = attendanceDao.update(attendance);
     }

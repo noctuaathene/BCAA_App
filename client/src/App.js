@@ -1,34 +1,34 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./Layout";
-import EventList from "./EventList";
+import BudgetList from "./BudgetList";
 import UserProvider from "./UserProvider";
-import EventListProvider from "./EventListProvider";
-import EventProvider from "./EventProvider";
-import EventRoute from "./EventRoute";
+import BudgetListProvider from "./BudgetListProvider";
+import BudgetProvider from "./BudgetProvider";
+import BudgetRoute from "./BudgetRoute";
 
 function App() {
   return (
     <div style={componentStyle()}>
       <UserProvider>
-        <EventListProvider>
+        <BudgetListProvider>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Layout />}>
-                <Route index element={<EventList />} />
+                <Route index element={<BudgetList />} />
                 <Route
-                  path="eventDetail"
+                  path="budgetDetail"
                   element={
-                    <EventProvider>
-                      <EventRoute />
-                    </EventProvider>
+                    <BudgetProvider>
+                      <BudgetRoute />
+                    </BudgetProvider>
                   }
                 />
                 <Route path="*" element={"not found"} />
               </Route>
             </Routes>
           </BrowserRouter>
-        </EventListProvider>
+        </BudgetListProvider>
       </UserProvider>
     </div>
   );

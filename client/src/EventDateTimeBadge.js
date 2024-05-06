@@ -1,5 +1,5 @@
-function EventDateTimeBadge({ event }) {
-  const dateToShow = new Date(event.date);
+function BudgetDateTimeBadge({ budget }) {
+  const dateToShow = new Date(budget.date);
 
   return (
     <div className={"rounded"} style={componentStyle()}>
@@ -47,4 +47,4 @@ function timeStyle() {
   };
 }
 
-export default EventDateTimeBadge;
+export default BudgetDateTimeBadge;

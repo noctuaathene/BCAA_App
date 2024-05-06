@@ -1,17 +1,17 @@
-const eventDao = require("../../dao/event-dao.js");
+const budgetDao = require("../../dao/budget-dao.js");
 const attendanceDao = require("../../dao/attendance-dao.js");
 
 async function ListAbl(req, res) {
   try {
-    const eventList = eventDao.list();
+    const budgetList = budgetDao.list();
 
-    const attendanceMap = attendanceDao.eventMap();
+    const attendanceMap = attendanceDao.budgetMap();
 
-    eventList.forEach((event) => {
-      event.userMap = attendanceMap[event.id] || {};
+    budgetList.forEach((budget) => {
+      budget.userMap = attendanceMap[budget.id] || {};
     });
 
-    res.json(eventList);
+    res.json(budgetList);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

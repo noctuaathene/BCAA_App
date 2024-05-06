@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { EventListContext } from "./EventListContext.js";
+import { BudgetListContext } from "./BudgetListContext.js";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -10,28 +10,28 @@ import Alert from "react-bootstrap/Alert";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 
-function EventForm({ setShowEventForm, event }) {
-  const { state, handlerMap } = useContext(EventListContext);
+function BudgetForm({ setShowBudgetForm, budget }) {
+  const { state, handlerMap } = useContext(BudgetListContext);
   const [showAlert, setShowAlert] = useState(null);
   const isPending = state === "pending";
 
   return (
-    <Modal show={true} onHide={() => setShowEventForm(false)}>
+    <Modal show={true} onHide={() => setShowBudgetForm(false)}>
       <Form
         onSubmit={async (e) => {
-          e.preventDefault();
+          e.prbudgetDefault();
           e.stopPropagation();
           var formData = Object.fromEntries(new FormData(e.target));
           formData.date = new Date(formData.date).toISOString();
           try {
-            if (event.id) {
-              formData.id = event.id;
+            if (budget.id) {
+              formData.id = budget.id;
               await handlerMap.handleUpdate(formData);
             } else {
               await handlerMap.handleCreate(formData);
             }
 
-            setShowEventForm(false);
+            setShowBudgetForm(false);
           } catch (e) {
             console.error(e);
             setShowAlert(e.message);
@@ -40,9 +40,9 @@ function EventForm({ setShowEventForm, event }) {
       >
         <Modal.Header>
           <Modal.Title>{`${
-            event.id ? "Upravit" : "Vytvořit"
+            budget.id ? "Upravit" : "Vytvořit"
           } událost`}</Modal.Title>
-          <CloseButton onClick={() => setShowEventForm(false)} />
+          <CloseButton onClick={() => setShowBudgetForm(false)} />
         </Modal.Header>
         <Modal.Body style={{ position: "relative" }}>
           <Alert
@@ -68,7 +68,7 @@ function EventForm({ setShowEventForm, event }) {
               name="date"
               required
               defaultValue={
-                event.date ? eventDateToInput(event.date) : undefined
+                budget.date ? budgetDateToInput(budget.date) : undefined
               }
             />
           </Form.Group>
@@ -78,20 +78,20 @@ function EventForm({ setShowEventForm, event }) {
               type="text"
               name="name"
               required
-              defaultValue={event.name}
+              defaultValue={budget.name}
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
-            onClick={() => setShowEventForm(false)}
+            onClick={() => setShowBudgetForm(false)}
             disabled={isPending}
           >
             Zavřít
           </Button>
           <Button type="submit" variant="primary" disabled={isPending}>
-            {event.id ? "Upravit" : "Vytvořit"}
+            {budget.id ? "Upravit" : "Vytvořit"}
           </Button>
         </Modal.Footer>
       </Form>
@@ -114,7 +114,7 @@ function pendingStyle() {
   };
 }
 
-function eventDateToInput(date) {
+function budgetDateToInput(date) {
   date = new Date(date);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -124,4 +124,4 @@ function eventDateToInput(date) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-export default EventForm;
+export default BudgetForm;
